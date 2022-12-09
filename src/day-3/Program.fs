@@ -1,6 +1,4 @@
-﻿open System
-open System.IO
-open System.Collections.Generic
+﻿open System.IO
 
 module Part1 =
     let valueOf c =
@@ -20,10 +18,14 @@ module Part1 =
         (str.[.. (str.Length / 2 - 1)], str.[str.Length / 2 ..])
 
     let (main: unit) =
-        let lines = (File.ReadAllText("input").Split("\n") |> Array.toList)
-        let splits = (List.map splitInHalf lines)
-        let matchedChars = List.fold foldMatch [] splits
-        printfn "Total value is: %i" (totalValue matchedChars)
+        printfn
+            "Total value is: %i"
+            (totalValue (
+                File.ReadAllText("input").Split("\n")
+                |> Array.toList
+                |> List.map splitInHalf
+                |> List.fold foldMatch []
+            ))
 
 module Part2 =
     let valueOf c =
@@ -47,7 +49,11 @@ module Part2 =
         | _ -> state
 
     let (main: unit) =
-        let lines = (File.ReadAllText("input").Split("\n") |> Array.toList)
-        let grouped = List.chunkBySize 3 lines
-        let matchedChars = List.fold foldMatch [] (grouped)
-        printfn "Total value is: %i" (totalValue matchedChars)
+        printfn
+            "Result: %i"
+            (totalValue (
+                File.ReadAllText("input").Split("\n")
+                |> Array.toList
+                |> List.chunkBySize 3
+                |> List.fold foldMatch []
+            ))
