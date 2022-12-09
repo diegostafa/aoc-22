@@ -1,26 +1,31 @@
 ﻿open System.IO
 
 module Part1 =
-    let (toInt: string -> int) = fun str -> str |> int
-    let (lines: string -> string list) = fun strBlock ->  strBlock.Split "\n" |> Array.toList
-    let (foldSum: int -> string -> int) = fun state str -> state + (toInt str)
-    let (sumCals: string -> int) = fun strBlock -> List.fold foldSum 0 (lines strBlock)
-    
-    let (main: unit) = 
-        let txt: string = File.ReadAllText("input")
-        let allCals: string list = txt.Split("\n\n") |> Array.toList
-        let totCalsByElf: int list = List.map sumCals allCals
-        printfn "max is: %i" (List.max totCalsByElf)
+    let lines (strBlock: string) = strBlock.Split "\n" |> Array.toList
+
+    let sumCals strBlock =
+        List.fold (fun state str -> state + (int str)) 0 (lines strBlock)
+
+    let (main: unit) =
+        printfn
+            "Result: %i"
+            (File.ReadAllText("input").Split("\n\n")
+             |> Array.toList
+             |> List.map sumCals
+             |> List.max)
 
 module Part2 =
-    let (toInt: string -> int) = fun str -> str |> int
-    let (lines: string -> string list) = fun strBlock ->  strBlock.Split "\n" |> Array.toList
-    let (foldSum: int -> string -> int) = fun state str -> state + (toInt str)
-    let (sumCals: string -> int) = fun strBlock -> List.fold foldSum 0 (lines strBlock)
-    
-    let (main: unit) = 
-        let txt: string = File.ReadAllText("input")
-        let allCals: string list = txt.Split("\n\n") |> Array.toList
-        let totCalsByElf: int list = List.map sumCals allCals
-        let sortedTotCalsByElf: int list = List.sortDescending totCalsByElf
-        printfn "Total top 3 is: %i" (List.sum (List.take 3 sortedTotCalsByElf))
+    let lines (strBlock: string) = strBlock.Split "\n" |> Array.toList
+
+    let sumCals strBlock =
+        List.fold (fun state str -> state + (int str)) 0 (lines strBlock)
+
+    let (main: unit) =
+        printfn
+            "Result: %i"
+            (File.ReadAllText("input").Split("\n\n")
+             |> Array.toList
+             |> List.map sumCals
+             |> List.sortDescending
+             |> List.take 3
+             |> List.sum)
