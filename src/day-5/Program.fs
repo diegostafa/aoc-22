@@ -44,7 +44,7 @@ module Part1 =
 
         printResult (
             List.fold
-                (fun arr (move: string list) -> execMove arr (move[1] |> int) (move[3] |> int) (move[5] |> int))
+                (fun arr (move: string list) -> execMove arr (int move[1]) (int move[3]) (int move[5]))
                 cranes
                 moves
         )
@@ -93,7 +93,7 @@ module Part2 =
 
         printResult (
             List.fold
-                (fun arr (move: string list) -> execMove arr (move[1] |> int) (move[3] |> int) (move[5] |> int))
+                (fun arr (move: string list) -> execMove arr (int move[1]) (int move[3]) (int move[5]))
                 cranes
                 moves
         )
