@@ -1,10 +1,8 @@
 ﻿open System.IO
 
 module Part1 =
-    let lines (strBlock: string) = strBlock.Split "\n" |> Array.toList
-
-    let sumCals strBlock =
-        List.fold (fun state str -> state + (int str)) 0 (lines strBlock)
+    let sumCals (strBlock:string) =
+        List.fold (fun acc cal -> acc + (int cal)) 0 (strBlock.Split "\n" |> Array.toList)
 
     let (main: unit) =
         printfn
@@ -15,10 +13,8 @@ module Part1 =
              |> List.max)
 
 module Part2 =
-    let lines (strBlock: string) = strBlock.Split "\n" |> Array.toList
-
-    let sumCals strBlock =
-        List.fold (fun state str -> state + (int str)) 0 (lines strBlock)
+    let sumCals (strBlock:string) =
+        List.fold (fun acc cal -> acc + (int cal)) 0 (strBlock.Split "\n" |> Array.toList)
 
     let (main: unit) =
         printfn
