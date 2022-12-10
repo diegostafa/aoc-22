@@ -2,26 +2,24 @@
 
 module Part1 =
     let sumCals (strBlock:string) =
-        List.fold (fun acc cal -> acc + (int cal)) 0 (strBlock.Split "\n" |> Array.toList)
+        Seq.fold (fun acc cal -> acc + (int cal)) 0 (strBlock.Split "\n")
 
     let (main: unit) =
         printfn
             "Result: %i"
             (File.ReadAllText("input").Split("\n\n")
-             |> Array.toList
-             |> List.map sumCals
-             |> List.max)
+             |> Seq.map sumCals
+             |> Seq.max)
 
 module Part2 =
     let sumCals (strBlock:string) =
-        List.fold (fun acc cal -> acc + (int cal)) 0 (strBlock.Split "\n" |> Array.toList)
+        Seq.fold (fun acc cal -> acc + (int cal)) 0 (strBlock.Split "\n")
 
     let (main: unit) =
         printfn
             "Result: %i"
             (File.ReadAllText("input").Split("\n\n")
-             |> Array.toList
-             |> List.map sumCals
-             |> List.sortDescending
-             |> List.take 3
-             |> List.sum)
+             |> Seq.map sumCals
+             |> Seq.sortDescending
+             |> Seq.take 3
+             |> Seq.sum)
