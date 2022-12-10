@@ -7,7 +7,7 @@ module Part1 =
         | _ -> int c - int 'A' + 27
 
     let totalValue cs =
-        List.fold (fun state c -> state + (valueOf c)) 0 cs
+        Seq.fold (fun state c -> state + (valueOf c)) 0 cs
 
     let foldMatch state curr =
         match curr with
@@ -22,9 +22,8 @@ module Part1 =
             "Total value is: %i"
             (totalValue (
                 File.ReadAllText("input").Split("\n")
-                |> Array.toList
-                |> List.map splitInHalf
-                |> List.fold foldMatch []
+                |> Seq.map splitInHalf
+                |> Seq.fold foldMatch []
             ))
 
 module Part2 =
@@ -34,7 +33,7 @@ module Part2 =
         | _ -> int c - int 'A' + 27
 
     let totalValue cs =
-        List.fold (fun state c -> state + (valueOf c)) 0 cs
+        Seq.fold (fun state c -> state + (valueOf c)) 0 cs
 
     let foldMatch state curr =
         match curr with

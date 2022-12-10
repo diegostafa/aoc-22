@@ -1,8 +1,7 @@
 ﻿open System.IO
 
 module Part1 =
-
-    let rec scrollWindow (stream: char list) currPos windowSize =
+    let rec scrollWindow currPos windowSize (stream: char list) =
         match stream with
         | [] -> currPos
         | x :: xs ->
@@ -11,17 +10,13 @@ module Part1 =
             if ((List.distinct buffer).Length = buffer.Length) then
                 currPos + windowSize
             else
-                scrollWindow xs (currPos + 1) windowSize
+                scrollWindow (currPos + 1) windowSize xs
 
     let (main: unit) =
-        let charStream = File.ReadAllText("input") |> Seq.toList
-        let markerPos = scrollWindow charStream 0
-
-        printfn "Result: %i" (markerPos 4)
+        printfn "Result: %i" (File.ReadAllText("input") |> Seq.toList |> scrollWindow 0 4)
 
 module Part2 =
-
-    let rec scrollWindow (stream: char list) currPos windowSize =
+    let rec scrollWindow currPos windowSize (stream: char list) =
         match stream with
         | [] -> currPos
         | x :: xs ->
@@ -30,10 +25,7 @@ module Part2 =
             if ((List.distinct buffer).Length = buffer.Length) then
                 currPos + windowSize
             else
-                scrollWindow xs (currPos + 1) windowSize
+                scrollWindow (currPos + 1) windowSize xs
 
     let (main: unit) =
-        let charStream = File.ReadAllText("input") |> Seq.toList
-        let markerPos = scrollWindow charStream 0
-
-        printfn "Result: %i" (markerPos 14)
+        printfn "Result: %i" (File.ReadAllText("input") |> Seq.toList |> scrollWindow 0 14)

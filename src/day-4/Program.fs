@@ -16,9 +16,8 @@ module Part1 =
         printfn
             "Total value is: %i"
             (File.ReadAllText("input").Split("\n")
-             |> Array.toList
-             |> List.map toPairs
-             |> List.fold foldContained 0)
+             |> Seq.map toPairs
+             |> Seq.fold foldContained 0)
 
 module Part2 =
     let isOverlapping ((a, b), (c, d)) =
@@ -37,6 +36,5 @@ module Part2 =
         printfn
             "Total value is: %i"
             (File.ReadAllText("input").Split("\n")
-             |> Array.toList
-             |> List.map toPairs
-             |> List.fold foldContained 0)
+             |> Seq.map toPairs
+             |> Seq.fold foldContained 0)

@@ -23,10 +23,9 @@ module Part1 =
         printfn
             "Result: %i"
             (File.ReadAllText("input").Split("\n")
-             |> Array.toList
-             |> List.map toPair
-             |> List.map moveValue
-             |> List.sum)
+             |> Seq.map toPair
+             |> Seq.map moveValue
+             |> Seq.sum)
 
 module Part2 =
     let toPair (line: string) =
@@ -50,7 +49,6 @@ module Part2 =
         printfn
             "Total value is: %i"
             (File.ReadAllText("input").Split("\n")
-             |> Array.toList
-             |> List.map toPair
-             |> List.map moveValue
-             |> List.sum)
+             |> Seq.map toPair
+             |> Seq.map moveValue
+             |> Seq.sum)
