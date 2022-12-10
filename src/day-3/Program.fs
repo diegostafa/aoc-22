@@ -17,7 +17,7 @@ module Part1 =
     let splitInHalf (str: string) =
         (str.[.. (str.Length / 2 - 1)], str.[str.Length / 2 ..])
 
-    let (main: unit) =
+    let solve =
         printfn
             "Total value is: %i"
             (totalValue (
@@ -47,7 +47,7 @@ module Part2 =
                 ))
         | _ -> state
 
-    let (main: unit) =
+    let solve =
         printfn
             "Result: %i"
             (totalValue (

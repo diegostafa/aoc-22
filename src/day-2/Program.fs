@@ -19,7 +19,7 @@ module Part1 =
         | (_, _) -> 0
 
 
-    let (main: unit) =
+    let solve =
         printfn
             "Result: %i"
             (File.ReadAllText("input").Split("\n")
@@ -45,7 +45,7 @@ module Part2 =
         | ("C", "Z") -> 7
         | (_, _) -> 0
 
-    let (main: unit) =
+    let solve =
         printfn
             "Total value is: %i"
             (File.ReadAllText("input").Split("\n")

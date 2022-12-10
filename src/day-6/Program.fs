@@ -12,7 +12,7 @@ module Part1 =
             else
                 scrollWindow (currPos + 1) windowSize xs
 
-    let (main: unit) =
+    let solve =
         printfn "Result: %i" (File.ReadAllText("input") |> Seq.toList |> scrollWindow 0 4)
 
 module Part2 =
@@ -27,5 +27,5 @@ module Part2 =
             else
                 scrollWindow (currPos + 1) windowSize xs
 
-    let (main: unit) =
+    let solve =
         printfn "Result: %i" (File.ReadAllText("input") |> Seq.toList |> scrollWindow 0 14)

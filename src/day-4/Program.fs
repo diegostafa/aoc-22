@@ -12,7 +12,7 @@ module Part1 =
     let foldContained state curr =
         if isContained curr then state + 1 else state
 
-    let (main: unit) =
+    let solve =
         printfn
             "Total value is: %i"
             (File.ReadAllText("input").Split("\n")
@@ -32,7 +32,7 @@ module Part2 =
     let foldContained state curr =
         if isOverlapping curr then state + 1 else state
 
-    let (main: unit) =
+    let solve =
         printfn
             "Total value is: %i"
             (File.ReadAllText("input").Split("\n")

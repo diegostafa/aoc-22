@@ -9,7 +9,7 @@ module Part1 =
         && Array.fold hidden false grid[.. (x - 1), y]
         && Array.fold hidden false grid[(x + 1) .., y]
 
-    let (main: unit) =
+    let solve =
         let arr2d = File.ReadAllText("input").Split("\n") |> Array.map Seq.toArray
         let grid = Array2D.init arr2d.Length arr2d[0].Length (fun x y -> arr2d[x][y])
         let mutable vis = Array2D.length1 grid * 2 + (Array2D.length2 grid - 2) * 2
@@ -33,7 +33,7 @@ module Part2 =
         * (fst (Array.fold countVisibleTrees (0, false) grid[x, (y + 1) ..]))
         * (fst (Array.fold countVisibleTrees (0, false) (Array.rev grid[x, .. (y - 1)])))
 
-    let (main: unit) =
+    let solve =
         let arr2d = File.ReadAllText("input").Split("\n") |> Array.map Seq.toArray
         let grid = Array2D.init arr2d.Length arr2d[0].Length (fun x y -> arr2d[x][y])
         let mutable (viewDists: int list) = []

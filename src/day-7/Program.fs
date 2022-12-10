@@ -30,7 +30,7 @@ module Part1 =
                     [ (dirSize) ]
                     @ (foldSize (List.removeManyAt 0 2 b) (Map.add (b[ 1 ].Split(" ")[2]) dirSize dict))
 
-    let (main: unit) =
+    let solve =
         let input =
             List.map remFileNames (List.rev (File.ReadAllText("input").Split("\n") |> Array.toList))
 
@@ -67,7 +67,7 @@ module Part2 =
                     [ (dirSize) ]
                     @ (foldSize (List.removeManyAt 0 2 b) (Map.add (b[ 1 ].Split(" ")[2]) dirSize dict))
 
-    let (main: unit) =
+    let solve =
         let input =
             List.map remFileNames (List.rev (File.ReadAllText("input").Split("\n") |> Array.toList))
 

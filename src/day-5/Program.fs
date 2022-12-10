@@ -30,7 +30,7 @@ module Part1 =
 
             res
 
-    let (main: unit) =
+    let solve =
         let parts = File.ReadAllText("input").Split("\n\n")
         let rawMoves = parts[ 1 ].Split("\n") |> Array.toList
         let moves = List.map (fun (str: string) -> str.Split(" ") |> Array.toList) rawMoves
@@ -79,7 +79,7 @@ module Part2 =
 
             res
 
-    let (main: unit) =
+    let solve =
         let parts = File.ReadAllText("input").Split("\n\n")
         let rawMoves = parts[ 1 ].Split("\n") |> Array.toList
         let moves = List.map (fun (str: string) -> str.Split(" ") |> Array.toList) rawMoves

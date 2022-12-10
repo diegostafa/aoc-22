@@ -64,7 +64,7 @@ module Part1 =
             (knots, grid)
             [ 0 .. (steps - 1) ]
 
-    let (main: unit) =
+    let solve =
         match
             File.ReadAllText("input").Split("\n")
             |> Seq.toList
@@ -137,7 +137,7 @@ module Part2 =
             (knots, grid)
             [ 0 .. (steps - 1) ]
 
-    let (main: unit) =
+    let solve =
         match
             File.ReadAllText("input").Split("\n")
             |> Seq.toList
