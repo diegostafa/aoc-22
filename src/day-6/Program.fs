@@ -1,31 +1,18 @@
 ﻿open System.IO
 
-module Part1 =
-    let rec scrollWindow currPos windowSize (stream: char list) =
-        match stream with
-        | [] -> currPos
-        | x :: xs ->
-            let buffer = (Seq.truncate windowSize stream) |> Seq.toList
+let rec scrollWindow currPos windowSize (stream: char list) =
+    match stream with
+    | [] -> currPos
+    | x :: xs ->
+        let buffer = (Seq.truncate windowSize stream) |> Seq.toList
 
-            if ((List.distinct buffer).Length = buffer.Length) then
-                currPos + windowSize
-            else
-                scrollWindow (currPos + 1) windowSize xs
+        if ((List.distinct buffer).Length = buffer.Length) then
+            currPos + windowSize
+        else
+            scrollWindow (currPos + 1) windowSize xs
 
-    let solve =
-        printfn "Result: %i" (File.ReadAllText("input") |> Seq.toList |> scrollWindow 0 4)
+let silver =
+    printfn "Result: %A" (File.ReadAllText("input") |> Seq.toList |> scrollWindow 0 4)
 
-module Part2 =
-    let rec scrollWindow currPos windowSize (stream: char list) =
-        match stream with
-        | [] -> currPos
-        | x :: xs ->
-            let buffer = (Seq.truncate windowSize stream) |> Seq.toList
-
-            if ((List.distinct buffer).Length = buffer.Length) then
-                currPos + windowSize
-            else
-                scrollWindow (currPos + 1) windowSize xs
-
-    let solve =
-        printfn "Result: %i" (File.ReadAllText("input") |> Seq.toList |> scrollWindow 0 14)
+let gold =
+    printfn "Result: %A" (File.ReadAllText("input") |> Seq.toList |> scrollWindow 0 14)

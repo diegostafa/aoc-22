@@ -70,7 +70,7 @@ let evalOp exp var =
     | Mul(a, b) -> (replace a var) * (replace b var)
     | Div(a, b) -> (replace a var) / (replace b var)
 
-let part1 =
+let silver =
     let ms = File.ReadAllText("input").Split("\n\n") |> Array.map parseMonke
     let mutable im = Array.fold (fun map m -> Map.add m.id 0 map) Map.empty ms
     let intz = int64 0
@@ -90,10 +90,10 @@ let part1 =
 
             m.items <- []
 
-    printfn "Result %A" (im.Values |> Seq.sortDescending |> Seq.take 2 |> Seq.fold (fun p v -> p * v) 1)
+    printfn "Result: %A" (im.Values |> Seq.sortDescending |> Seq.take 2 |> Seq.fold (fun p v -> p * v) 1)
 
 
-let part2 =
+let gold =
     let ms = File.ReadAllText("input").Split("\n\n") |> Array.map parseMonke
 
     let lcm =
@@ -118,7 +118,7 @@ let part2 =
             m.items <- []
 
     printfn
-        "Result %A"
+        "Result: %A"
         (im.Values
          |> Seq.sortDescending
          |> Seq.take 2
