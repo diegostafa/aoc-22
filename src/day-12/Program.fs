@@ -12,12 +12,12 @@ let mutable (visited: (int * int) list) = []
 let possibleMoves (x, y) (grid: char[,]) =
     [ (x - 1, y); (x + 1, y); (x, y - 1); (x, y + 1) ]
     |> List.filter (fun (i, j) ->
-        (not (i = -1)
+        (   not (i = -1)
          && not (j = -1)
          && not (i = Array2D.length1 grid)
          && not (j = Array2D.length2 grid))
-        && not (visited |> List.contains (i, j))
-        && not (int grid[i, j] > (int grid[x, y] + 1)))
+         && not (visited |> List.contains (i, j))
+         && not (int grid[i, j] > (int grid[x, y] + 1)))
 
 let rec minCost wave e grid =
     if List.contains e wave then
