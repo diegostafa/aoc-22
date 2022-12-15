@@ -24,7 +24,6 @@ let toSensor (s, b) =
       str = mhDist s b }
 
 let frontier (s: Sensor) =
-    printfn "DOING %A" s
     let mutable f = []
 
     let sx = (s.x - s.str - 1, s.y)
@@ -38,19 +37,19 @@ let frontier (s: Sensor) =
         f <- [ curr ] @ f
         curr <- (fst curr + 1, snd curr - 1)
 
-    let mutable curr = tp
+    curr <- tp
 
     while not (curr = dx) do
         f <- [ curr ] @ f
         curr <- (fst curr + 1, snd curr + 1)
 
-    let mutable curr = dx
+    curr <- dx
 
     while not (curr = bt) do
         f <- [ curr ] @ f
         curr <- (fst curr - 1, snd curr + 1)
 
-    let mutable curr = bt
+    curr <- bt
 
     while not (curr = sx) do
         f <- [ curr ] @ f
@@ -67,8 +66,6 @@ let silver =
     let knownXs =
         List.fold (fun acc (s: Sensor) -> acc @ [ s.x - s.str; s.x + s.str ]) [] sensors
 
-    let allXs = [ List.min knownXs .. List.max knownXs ]
-
     let impBeacon =
         List.fold
             (fun acc x ->
@@ -76,7 +73,7 @@ let silver =
                 | true -> acc + 1
                 | false -> acc)
             0
-            allXs
+            [ List.min knownXs .. List.max knownXs ]
 
     let confirmedBeacons =
         input
@@ -91,13 +88,10 @@ let gold =
     let disc = 4000000
     let sensors = input |> List.map toSensor
 
-    let candidates =
+    let beacon =
         sensors
         |> List.fold (fun acc s -> frontier s @ acc) []
         |> List.filter (fun (x, y) -> x >= 0 && x <= disc && y >= 0 && y <= disc)
-
-    let beacon =
-        candidates
         |> List.find (fun c ->
             List.fold
                 (fun notInRange (s: Sensor) -> notInRange && mhDist (s.x, s.y) (fst c, snd c) > s.str)
