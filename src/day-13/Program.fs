@@ -77,7 +77,7 @@ let rec cmpPackets p1 p2 =
 let silver =
     printfn
         "Result: %A"
-        (File.ReadAllText("sinput").Split("\n\n")
+        (File.ReadAllText("input").Split("\n\n")
          |> Array.toList
          |> List.map toPair
          |> List.map (fun (x, y) -> (toPacket x, toPacket y))
