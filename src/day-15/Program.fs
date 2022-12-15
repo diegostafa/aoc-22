@@ -2,18 +2,11 @@
 
 type Sensor = { x: int; y: int; str: int }
 
-let toPairs (line: string) =
-    let a = line.Split(",")
-    (int a[0], int a[1]), (int a[2], int a[3])
-
-let mhDist (sx, sy) (bx, by) = (abs (sx - bx)) + (abs (sy - by))
-
-let toSensor (s, b) =
-    { x = fst s
-      y = snd s
-      str = mhDist s b }
-
 let input =
+    let toPairs (line: string) =
+        let a = line.Split(",")
+        (int a[0], int a[1]), (int a[2], int a[3])
+
     File
         .ReadAllText("input")
         .Replace("Sensor at x=", "")
@@ -23,8 +16,15 @@ let input =
     |> Array.toList
     |> List.map toPairs
 
+let mhDist (sx, sy) (bx, by) = (abs (sx - bx)) + (abs (sy - by))
+
+let toSensor (s, b) =
+    { x = fst s
+      y = snd s
+      str = mhDist s b }
+
 let frontier (s: Sensor) =
-    printfn "DOING %A" s 
+    printfn "DOING %A" s
     let mutable f = []
 
     let sx = (s.x - s.str - 1, s.y)
@@ -59,7 +59,7 @@ let frontier (s: Sensor) =
     f
 
 let silver =
-    let disc = 10
+    let disc = 2000000
 
     let sensors =
         input |> List.map toSensor |> List.filter (fun s -> abs (s.y - disc) <= s.str)

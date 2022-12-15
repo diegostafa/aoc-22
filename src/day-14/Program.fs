@@ -6,11 +6,11 @@ let rock = '#'
 let air = ' '
 let water = '~'
 
-let toPair (str: string) =
-    let a = str.Split(",")
-    (int a[1], int a[0])
-
 let rockss =
+    let toPair (str: string) =
+        let a = str.Split(",")
+        (int a[1], int a[0])
+
     File.ReadAllText("input").Split("\n")
     |> Array.toList
     |> List.map (fun (l: string) -> l.Split(" -> ") |> Array.toList)
