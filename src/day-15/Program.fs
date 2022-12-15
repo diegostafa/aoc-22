@@ -15,7 +15,7 @@ let toSensor (s, b) =
 
 let input =
     File
-        .ReadAllText("sinput")
+        .ReadAllText("input")
         .Replace("Sensor at x=", "")
         .Replace(" y=", "")
         .Replace(": closest beacon is at x=", ",")
@@ -24,15 +24,40 @@ let input =
     |> List.map toPairs
 
 let frontier (s: Sensor) =
+    printfn "DOING %A" s 
     let mutable f = []
 
-    for i in s.x - s.str .. s.x + s.str do
-        for j in s.y - s.str .. s.y + s.str do
-            if mhDist (i, j) (s.x, s.y) = s.str + 1 then
-                f <- f @ [ (i, j) ]
+    let sx = (s.x - s.str - 1, s.y)
+    let dx = (s.x + s.str + 1, s.y)
+    let tp = (s.x, s.y - s.str - 1)
+    let bt = (s.x, s.y + s.str + 1)
+
+    let mutable curr = sx
+
+    while not (curr = tp) do
+        f <- [ curr ] @ f
+        curr <- (fst curr + 1, snd curr - 1)
+
+    let mutable curr = tp
+
+    while not (curr = dx) do
+        f <- [ curr ] @ f
+        curr <- (fst curr + 1, snd curr + 1)
+
+    let mutable curr = dx
+
+    while not (curr = bt) do
+        f <- [ curr ] @ f
+        curr <- (fst curr - 1, snd curr + 1)
+
+    let mutable curr = bt
+
+    while not (curr = sx) do
+        f <- [ curr ] @ f
+        curr <- (fst curr - 1, snd curr - 1)
 
     f
-    
+
 let silver =
     let disc = 10
 
@@ -65,13 +90,18 @@ let silver =
 let gold =
     let disc = 4000000
     let sensors = input |> List.map toSensor
-    let candidates = sensors |> List.fold (fun acc s -> acc @ frontier s) []
 
-    printfn "FOUND %A CANDIDATES" candidates.Length
+    let candidates =
+        sensors
+        |> List.fold (fun acc s -> frontier s @ acc) []
+        |> List.filter (fun (x, y) -> x >= 0 && x <= disc && y >= 0 && y <= disc)
 
     let beacon =
         candidates
-        |> List.filter (fun c ->
-            List.fold (fun acc (s: Sensor) -> acc && mhDist (s.x, s.y) (fst c, snd c) > s.str) true sensors)
+        |> List.find (fun c ->
+            List.fold
+                (fun notInRange (s: Sensor) -> notInRange && mhDist (s.x, s.y) (fst c, snd c) > s.str)
+                true
+                sensors)
 
-    printfn "GOLD %A" beacon
+    printfn "Result: %A" ((int64 (fst beacon)) * int64 4000000 + int64 (snd beacon))
