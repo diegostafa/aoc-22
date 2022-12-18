@@ -15,7 +15,7 @@ let valves =
         | _ -> failwith "INVALID INPUT"
 
     File
-        .ReadAllText("sinput")
+        .ReadAllText("input")
         .Replace("Valve ", "")
         .Replace(" has flow rate=", ",")
         .Replace("; tunnels lead to valves ", ",")
@@ -26,18 +26,18 @@ let valves =
     |> List.map toValve
 
 let getNeighbors v =
-    List.filter (fun vt -> (List.contains vt.id v.conns)) valves
+    valves |> List.filter (fun vt -> (List.contains vt.id v.conns))
 
-let mutable (memoSilver: Map<Valve * int * Map<string, unit>, int>) = Map.empty
+let mutable (memoSilver: Map<string * int * Map<string, unit>, int>) = Map.empty
 
-let mutable (memoGold: Map<(Valve * Valve) * int * Map<string, unit>, int>) =
+let mutable (memoGold: Map<string * string * int * int * Map<string, unit> * bool, int>) =
     Map.empty
 
-let rec maxPressureSilver (v: Valve) (time: int) openValves =
+let rec maxPressureSilver v time openValves =
     match () with
-    | _ when memoSilver.ContainsKey(v, time, openValves) -> memoSilver[v, time, openValves]
+    | _ when memoSilver.ContainsKey(v.id, time, openValves) -> memoSilver.[v.id, time, openValves]
     | _ when time <= 0 -> 0
-    | _ when openValves.Keys.Count = valves.Length -> 0
+    | _ when openValves.Count = valves.Length -> 0
     | _ ->
         let nextValves = getNeighbors v
         let mutable maxPressure = 0
@@ -54,58 +54,54 @@ let rec maxPressureSilver (v: Valve) (time: int) openValves =
 
             maxPressure <- maxPressure |> max leaveValve |> max openValve
 
-        memoSilver <- Map.add (v, time, openValves) maxPressure memoSilver
+        memoSilver <- Map.add (v.id, time, openValves) maxPressure memoSilver
         maxPressure
 
-let rec maxPressureGold (v1: Valve, v2: Valve) time (openValves: Map<string, unit>) =
+let rec maxPressureGold (v1, v2) (t1, t2) openValves yourTurn =
     match () with
-    | _ when memoGold.ContainsKey((v1, v2), time, openValves) -> memoGold[(v1, v2), time, openValves]
-    | _ when time <= 0 -> 0
-    | _ when openValves.Keys.Count = valves.Length -> 0
-    | _ ->
-        let nextValves1 = getNeighbors v1
-        let nextValves2 = getNeighbors v2
+    | _ when t1 <= 0 || t2 <= 0 -> 0
+    | _ when memoGold.ContainsKey(v1.id, v2.id, t1, t2, openValves, yourTurn) ->
+        memoGold[v1.id, v2.id, t1, t2, openValves, yourTurn]
+    | _ when openValves.Count = valves.Length -> 0
+    | _ when yourTurn ->
+        let nextValves = getNeighbors v1 |> List.filter (fun v -> not (v.id = v2.id))
         let mutable maxPressure = 0
 
-        for n1 in nextValves1 do
-            for n2 in nextValves2 do
-                let leaveBoth = maxPressureGold (n1, n2) (time - 1) openValves
+        for n in nextValves do
+            let leaveValve = maxPressureGold (n, v2) (t1 - 1, t2) openValves (not yourTurn)
 
-                let openV1 =
-                    if v1.pressure = 0 || Map.containsKey v1.id openValves then
-                        0
-                    else
-                        v1.pressure * (time - 1)
-                        + maxPressureGold (n1, n2) (time - 2) (Map.add v1.id () openValves)
+            let openValve =
+                if Map.containsKey v1.id openValves || v1.pressure = 0 then
+                    0
+                else
+                    v1.pressure * (t1 - 1)
+                    + maxPressureGold (n, v2) (t1 - 2, t2) (Map.add v1.id () openValves) (not yourTurn)
 
-                let openV2 =
-                    if v2.pressure = 0 || Map.containsKey v2.id openValves then
-                        0
-                    else
-                        v2.pressure * (time - 1)
-                        + maxPressureGold (n1, n2) (time - 2) (Map.add v2.id () openValves)
+            maxPressure <- maxPressure |> max leaveValve |> max openValve
 
-                let openBoth =
-                    if
-                        (v1.pressure = 0 && v2.pressure = 0)
-                        || Map.containsKey v2.id openValves
-                        || Map.containsKey v2.id openValves
-                    then
-                        0
-                    elif v1.id = v2.id then
-                        v1.pressure * (time - 1)
-                        + maxPressureGold (n1, n2) (time - 2) (Map.add v1.id () (Map.add v2.id () openValves))
-                    else
-                        v1.pressure * (time - 1)
-                        + v2.pressure * (time - 1)
-                        + maxPressureGold (n1, n2) (time - 2) (Map.add v1.id () (Map.add v2.id () openValves))
-
-                maxPressure <- maxPressure |> max leaveBoth |> max openV1 |> max openV2 |> max openBoth
-
-        memoGold <- Map.add ((v1, v2), time, openValves) maxPressure memoGold
+        memoGold <- Map.add (v1.id, v2.id, t1, t2, openValves, yourTurn) maxPressure memoGold
         maxPressure
+    | _ when not yourTurn ->
+        let nextValves = getNeighbors v2 |> List.filter (fun v -> not (v.id = v1.id))
+        let mutable maxPressure = 0
 
-let silver =
-    let time = 30
+        for n in nextValves do
+            let leaveValve = maxPressureGold (v1, n) (t1, t2 - 1) openValves (not yourTurn)
+
+            let openValve =
+                if Map.containsKey v2.id openValves || v2.pressure = 0 then
+                    0
+                else
+                    v2.pressure * (t2 - 1)
+                    + maxPressureGold (v1, n) (t1, t2 - 2) (Map.add v2.id () openValves) (not yourTurn)
+
+            maxPressure <- maxPressure |> max leaveValve |> max openValve
+
+        memoGold <- Map.add (v1.id, v2.id, t1, t2, openValves, yourTurn) maxPressure memoGold
+        maxPressure
+    | _ -> failwith "UNMATCHED CASE"
+
+let gold =
+    let time = 26
     let start = List.find (fun v -> v.id = "AA") valves
-    printfn "Result: %A" (maxPressureGold (start, start) time Map.empty)
+    printfn "Result: %A" (maxPressureGold (start, start) (time, time) Map.empty true)
